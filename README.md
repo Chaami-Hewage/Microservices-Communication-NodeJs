@@ -1,101 +1,108 @@
-# Distributed Microservices Project
+# Microservices Architecture Project README
 
-Welcome to our distributed microservices project that includes User Management, Order Placement, and Inventory Management microservices. These microservices communicate with each other using RabbitMQ for message queuing and perform various tasks related to user management, order placement, and inventory management.
+This project demonstrates a simple microservices architecture implemented using Node.js, Express.js, and various databases. The architecture consists of three microservices:
+
+1. **User Management Microservice** - Responsible for managing user data.
+2. **Order Placement Microservice** - Handles order-related operations.
+3. **Inventory Management Microservice** - Manages product inventory.
+
+A Gateway microservice is used to route requests to the appropriate microservice based on the request URL.
 
 ## Table of Contents
 
-- [Project Overview](#project-overview)
-- [Microservices Architecture](#microservices-architecture)
-- [Technologies Used](#technologies-used)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-- [Postman Collection](#postman-collection)
+1. [Prerequisites](#prerequisites)
+2. [Project Structure](#project-structure)
+3. [Setting Up Microservices](#setting-up-microservices)
+4. [Database Integration](#database-integration)
+5. [Microservices Communication](#microservices-communication)
+6. [Running the Project](#running-the-project)
+7. [Testing with Postman](#testing-with-postman)
+8. [Postman Collection](#postman-collection)
+9. [Git Repository](#git-repository)
+10. [Contributing](#contributing)
+11. [License](#license)
 
-## Project Overview
+## Prerequisites
 
-This project demonstrates a distributed microservices architecture for managing users, orders, and products. Each microservice is responsible for a specific domain:
+Before you begin, ensure you have the following installed:
 
-- **User Management Microservice:** Manages user data, including user creation, retrieval, update, and deletion.
+- Node.js and npm
+- MongoDB, PostgreSQL, and MySQL (depending on the microservices)
+- Postman (for testing)
+- Git (optional, for version control)
 
-- **Order Placement Microservice:** Handles order creation, retrieval, update, and deletion, and communicates with the User Management Microservice.
+## Project Structure
 
-- **Inventory Management Microservice:** Manages product information, including creation, retrieval, update, and deletion. It also communicates with the User Management Microservice.
+The project is organized into the following directories:
 
-The microservices communicate with each other through RabbitMQ queues to maintain data consistency across the system.
+- **User Management**: User-related microservice.
+- **Order Placement**: Order management microservice.
+- **Inventory Management**: Inventory-related microservice.
+- **Gateway**: Microservices communication and routing.
 
-## Microservices Architecture
+Each microservice has its own folder containing code, routes, and database configurations.
 
-The microservices are designed to follow a distributed architecture. They use RESTful APIs for communication and RabbitMQ for asynchronous messaging. Each microservice is contained in its own directory and has its own configuration files:
+## Setting Up Microservices
 
-### User Management
+### User Management Microservice
 
-- `index.js`
-- `routes/`
-- `models/`
-- ...
+1. Navigate to the `User Management` directory.
+2. Create a `.env` file and set the MySQL database connection details.
+3. Run `npm install` to install dependencies.
+4. Run `npm start` to start the User Management microservice.
 
-### Order Placement
+### Order Placement Microservice
 
-- `index.js`
-- `routes/`
-- `models/`
-- ...
+1. Navigate to the `Order Placement` directory.
+2. Create a `.env` file and set the PostgreSQL database connection details.
+3. Run `npm install` to install dependencies.
+4. Run `npm start` to start the Order Placement microservice.
 
-### Inventory Management
+### Inventory Management Microservice
 
-- `index.js`
-- `routes/`
-- `models/`
-- ...
+1. Navigate to the `Inventory Management` directory.
+2. Create a `.env` file and set the MongoDB connection string.
+3. Run `npm install` to install dependencies.
+4. Run `npm start` to start the Inventory Management microservice.
 
-## Technologies Used
+## Database Integration
 
-The project utilizes the following technologies:
+Each microservice uses a different database:
 
-- **Node.js** and **Express.js** for building the microservices.
-- **MySQL**, **PostgreSQL**, and **MongoDB** for data storage in respective microservices.
-- **RabbitMQ** for asynchronous messaging and communication between microservices.
-- **Sequelize** and **Mongoose** as Object-Relational Mapping (ORM) libraries.
+- User Management: MySQL
+- Order Placement: PostgreSQL
+- Inventory Management: MongoDB
 
-## Installation
+Refer to the `.env` files in each microservice's directory for database configuration.
 
-1. Clone the repository:
+## Microservices Communication
 
-   ```bash
-   git clone https://github.com/GevinN99/NodeJS-Microservice.git
-   cd <repository-directory>
+The Gateway microservice handles communication between microservices by routing requests to the appropriate service based on the URL path.
 
-2. Install dependencies for each microservice:
+## Running the Project
 
-    cd user-management
-    npm install
+1. Start each microservice as described in the "Setting Up Microservices" section.
+2. Start the Gateway microservice from its directory:
+   - cd Gateway
+   - npm install
+   - npm start
 
-    Repeat this step for the Order Placement and Inventory Management microservices.
+## Testing with Postman
 
-3. Set up the required environment variables by creating .env files for each microservice based on the provided     examples.
-
-4. Create and configure the databases as mentioned in the .env files.
-
-5. Start each microservice:
-
-    npm start
-
-You can run each microservice on a different port or use a process manager like PM2 for production deployments.
-
-## Usage
-
-To use the microservices, you can send HTTP requests to their respective endpoints.
-
-## Contributing
-
-If you'd like to contribute to this project, please follow the standard GitHub Fork and Pull Request workflow. Be sure to adhere to the project's coding style and guidelines.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+You can use Postman to test the microservices' endpoints. Import the provided Postman script to simplify testing.
 
 ## Postman Collection
 
-Access our Postman collection to explore and test the API endpoints: [Postman Collection](https://www.postman.com/avionics-operator-73461619/workspace/adbms-assignment-01/collection/26510408-ba20ad31-6b5c-4721-a991-0183ffb3b232?action=share&creator=26510388)
+Access our Postman collection to explore and test the API endpoints: [Postman Collection](https://interstellar-satellite-980339.postman.co/workspace/New-Team-Workspace~852ec3c5-76a7-424c-8a86-377ffe6f1bcc/collection/29481774-d601791f-8ce3-4516-8585-870a478ca3c6?action=share&creator=29481774)
+
+## Git Repository
+
+Find the project's source code and documentation on our GitHub repository: [GitHub Repository](https://github.com/Chaami-Hewage/Microservices-Communication-NodeJs.git)
+
+## Contributing
+
+Contributions are welcome! Please follow our [contributing guidelines](CONTRIBUTING.md).
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

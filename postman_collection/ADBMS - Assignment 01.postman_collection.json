@@ -1,0 +1,226 @@
+{
+	"info": {
+		"_postman_id": "ef18e789-ab60-43ce-a6fb-a384b1f9185c",
+		"name": "ADBMS - Assignment 01",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "26510408"
+	},
+	"item": [
+		{
+			"name": "Inventory Management",
+			"item": [
+				{
+					"name": "Create a new product with POST request to the Order Placement microservice",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Sample Product\",\r\n    \"desc\": \"This is a sample product description\",\r\n    \"banner\": \"https://example.com/sample-product-banner.jpg\",\r\n    \"type\": \"Electronics\",\r\n    \"unit\": 10,\r\n    \"price\": 49.99,\r\n    \"available\": true,\r\n    \"supplier\": \"Sample Supplier\",\r\n    \"messageId\": \"MSG123\",\r\n    \"eventTimestamp\": \"2023-09-01T12:00:00Z\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8073/products/addProduct"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all products",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8070/products/"
+					},
+					"response": []
+				},
+				{
+					"name": "Get a specific product by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8073/products/64f43e0debe3af9ff62809e2"
+					},
+					"response": []
+				},
+				{
+					"name": "Update a specific product by ID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Updated Product Name 11\",\r\n    \"desc\": \"Updated product description\",\r\n    \"banner\": \"Updated image URL\",\r\n    \"type\": \"Updated product type\",\r\n    \"unit\": 20,\r\n    \"price\": 29.99,\r\n    \"available\": true,\r\n    \"supplier\": \"Updated Supplier Name\",\r\n    \"messageId\": \"Updated Unique Message ID\",\r\n    \"eventTimestamp\": \"2023-09-03T13:00:00Z\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8073/products/64f43e0debe3af9ff62809e2"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a specific product by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8073/products/64f43c8233e046b2277e3f75"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order Placement",
+			"item": [
+				{
+					"name": "Create an order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"orderId\": \"ORDER005\",\r\n    \"customerId\": \"CUSTOMER004\",\r\n    \"amount\": 200,\r\n    \"status\": \"PROCESSING\",\r\n    \"txnId\": \"TXN005\",\r\n    \"createdAt\": \"2023-09-03T10:00:00Z\",\r\n    \"updatedAt\": \"2023-09-03T10:00:00Z\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8072/order/addOrder"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8070/order/orders"
+					},
+					"response": []
+				},
+				{
+					"name": "Get an Order by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8072/order/order/2"
+					},
+					"response": []
+				},
+				{
+					"name": "Update an Order by ID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"orderId\": \"updatedOrderId\",\r\n    \"customerId\": \"updatedCustomerId\",\r\n    \"amount\": 99.99,\r\n    \"status\": \"updatedStatus\",\r\n    \"txnId\": \"updatedTxnId\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8072/order/updateOrder/2"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete an Order by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8072/order/deleteOrder/1"
+					},
+					"response": []
+				},
+				{
+					"name": "Get user information by user ID from User Management microservice",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8072/order/getUserInfo/14"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Management",
+			"item": [
+				{
+					"name": "Add a new user with GET request to the User Management microservice",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"newuser9@example.com\",\r\n    \"password\": \"password1239\",\r\n    \"salt\": \"somesaltvalue\",\r\n    \"phone\": \"1234567890\",\r\n    \"address_id\": 9\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8074/users/addUser"
+					},
+					"response": []
+				},
+				{
+					"name": "Update a user by ID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"newemail98@example.com\",\r\n    \"password\": \"newpassword123\",\r\n    \"phone\": \"1234567890\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8074/users/updateUser/13"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a user by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8074/users/19"
+					},
+					"response": []
+				},
+				{
+					"name": "Get a user by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8074/users/20"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
