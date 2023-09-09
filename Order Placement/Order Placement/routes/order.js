@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { Order, Item } = require('../models/Order');
+const amqp = require("amqplib/callback_api");
 
 // Create an order
-router.post('/orders', async (req, res) => {
+router.post('/addOrder', async (req, res) => {
     try {
         const { orderId, customerId, amount, status, txnId, items } = req.body;
 
@@ -20,6 +21,12 @@ router.post('/orders', async (req, res) => {
             unit: item.unit,
             OrderId: order.id, // Associate with the order
         })));
+
+        //message to rabbitmq
+        const channel = await amqp.createChannel();
+        const exchange = "order_exchange";
+        channel.assertExchange(exchange, "fanout", { durable: true });
+        channel.publish(exchange, "", Buffer.from(JSON.stringify(order)));
 
         res.json(order);
     } catch (error) {
@@ -43,7 +50,7 @@ router.get('/orders', async (req, res) => {
 });
 
 // Get order by ID
-router.get('/orders/:id', async (req, res) => {
+router.get('/order/:id', async (req, res) => {
     try {
         const order = await Order.findByPk(req.params.id, {
             include: Item, // Include associated items
@@ -61,7 +68,7 @@ router.get('/orders/:id', async (req, res) => {
 });
 
 // Update order by ID
-router.put('/orders/:id', async (req, res) => {
+router.put('/updateOrder/:id', async (req, res) => {
     try {
         const order = await Order.findByPk(req.params.id);
 
@@ -79,7 +86,11 @@ router.put('/orders/:id', async (req, res) => {
             txnId,
         });
 
-        // Update associated items (you can implement this if needed)
+        //message to rabbitmq
+        const channel = await amqp.createChannel();
+        const exchange = "order_exchange";
+        channel.assertExchange(exchange, "fanout", { durable: true });
+        channel.publish(exchange, "", Buffer.from(JSON.stringify(order)));
 
         res.json(order);
     } catch (error) {
@@ -89,7 +100,7 @@ router.put('/orders/:id', async (req, res) => {
 });
 
 // Delete order by ID
-router.delete('/orders/:id', async (req, res) => {
+router.delete('/deleteOrder/:id', async (req, res) => {
     try {
         const order = await Order.findByPk(req.params.id);
 
@@ -97,9 +108,13 @@ router.delete('/orders/:id', async (req, res) => {
             return res.status(404).json({ error: 'Order not found' });
         }
 
-        // Delete associated items first (you can implement this if needed)
-
         await order.destroy();
+
+        //message to rabbitmq
+        const channel = await amqp.createChannel();
+        const exchange = "order_exchange";
+        channel.assertExchange(exchange, "fanout", { durable: true });
+        channel.publish(exchange, "", Buffer.from(JSON.stringify(order)));
 
         res.status(204).end();
     } catch (error) {
@@ -109,3 +124,4 @@ router.delete('/orders/:id', async (req, res) => {
 });
 
 module.exports = router;
+

@@ -17,4 +17,14 @@ const pool = new Pool({
     port: DB_PORT
 });
 
-module.exports = { pool };
+/* Sequelize Setup */
+const { Sequelize } = require('sequelize');
+
+const DB_URL = process.env.POSTGRESQL_URL;
+
+const sequelize = new Sequelize(DB_URL, {
+    dialect: "postgres",
+    // logging: false
+});
+
+module.exports = { pool, sequelize };

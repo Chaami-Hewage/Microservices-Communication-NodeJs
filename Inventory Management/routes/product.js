@@ -2,92 +2,84 @@ const express = require("express");
 const router = express.Router();
 const Product = require("../models/Product");
 
-module.exports = (amqp) => {
+// Create a new product
+router.post("/addProduct", async (req, res) => {
+    try {
+        const newProduct = new Product({
+            name: req.body.name,
+            desc: req.body.desc,
+            banner: req.body.banner,
+            type: req.body.type,
+            unit: req.body.unit,
+            price: req.body.price,
+            available: req.body.available,
+            supplier: req.body.supplier,
+            messageId: req.body.messageId,
+            eventTimestamp: req.body.eventTimestamp,
+        });
 
-    // Create a new product
-    router.post("/addProduct", async (req, res) => {
-        try {
-            const product = new Product(req.body);
-            const savedProduct = await product.save();
+        const savedProduct = await newProduct.save();
 
-            //message to rabbitmq
-            const channel = await amqp.createChannel();
-            const exchange = "product_exchange";
-            channel.assertExchange(exchange, "fanout", { durable: true });
-            channel.publish(exchange, "", Buffer.from(JSON.stringify(savedProduct)));
+        res.json(savedProduct);
+    } catch (error) {
+        console.error("Error creating product:", error);
+        res.status(500).json({ error: "Unable to create the product" });
+    }
+});
 
-            res.json(savedProduct);
-        } catch (error) {
-            res.status(500).json({ error: "Unable to create the product" });
+// Get all products
+router.get("/", async (req, res) => {
+    try {
+        const products = await Product.find();
+        res.json(products);
+    } catch (error) {
+        res.status(500).json({ error: "Unable to fetch products" });
+    }
+});
+
+// Get a specific product by ID
+router.get("/:productId", async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.productId);
+        if (!product) {
+            return res.status(404).json({ error: "Product not found" });
         }
-    });
+        res.json(product);
+    } catch (error) {
+        res.status(500).json({ error: "Unable to fetch the product" });
+    }
+});
 
-    // Get all products
-    router.get("/", async (req, res) => {
-        try {
-            const products = await Product.find();
-            res.json(products);
-        } catch (error) {
-            res.status(500).json({ error: "Unable to fetch products" });
+// Update a specific product by ID
+router.put("/:productId", async (req, res) => {
+    try {
+        const updatedProduct = await Product.findByIdAndUpdate(
+            req.params.productId,
+            req.body,
+            { new: true }
+        );
+        if (!updatedProduct) {
+            return res.status(404).json({ error: "Product not found" });
         }
-    });
 
-    // Get a specific product by ID
-    router.get("/:productId", async (req, res) => {
-        try {
-            const product = await Product.findById(req.params.productId);
-            if (!product) {
-                return res.status(404).json({ error: "Product not found" });
-            }
-            res.json(product);
-        } catch (error) {
-            res.status(500).json({ error: "Unable to fetch the product" });
+        res.json(updatedProduct);
+    } catch (error) {
+        res.status(500).json({ error: "Unable to update the product" });
+    }
+});
+
+// Delete a specific product by ID
+router.delete("/:productId", async (req, res) => {
+    try {
+        const deletedProduct = await Product.findByIdAndRemove(req.params.productId);
+        if (!deletedProduct) {
+            return res.status(404).json({ error: "Product not found" });
         }
-    });
 
-    // Update a specific product by ID
-    router.put("/:productId", async (req, res) => {
-        try {
-            const updatedProduct = await Product.findByIdAndUpdate(
-                req.params.productId,
-                req.body,
-                { new: true }
-            );
-            if (!updatedProduct) {
-                return res.status(404).json({ error: "Product not found" });
-            }
+        res.json({ message: "Product deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ error: "Unable to delete the product" });
+    }
+});
 
-            // message to rabbitmq
-            const channel = await amqp.createChannel();
-            const exchange = "product_exchange";
-            channel.assertExchange(exchange, "fanout", { durable: true });
-            channel.publish(exchange, "", Buffer.from(JSON.stringify(updatedProduct)));
-
-            res.json(updatedProduct);
-        } catch (error) {
-            res.status(500).json({ error: "Unable to update the product" });
-        }
-    });
-
-    // Delete a specific product by ID
-    router.delete("/:productId", async (req, res) => {
-        try {
-            const deletedProduct = await Product.findByIdAndRemove(req.params.productId);
-            if (!deletedProduct) {
-                return res.status(404).json({ error: "Product not found" });
-            }
-
-            //message to rabbitmq
-            const channel = await amqp.createChannel();
-            const exchange = "product_exchange";
-            channel.assertExchange(exchange, "fanout", { durable: true });
-            channel.publish(exchange, "", Buffer.from(JSON.stringify(deletedProduct)));
-
-            res.json({ message: "Product deleted successfully" });
-        } catch (error) {
-            res.status(500).json({ error: "Unable to delete the product" });
-        }
-    });
-
-    return router;
-};
+module.exports = router;

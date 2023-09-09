@@ -14,8 +14,6 @@ app.use(bodyParser.json());
 const productRouter = require("./routes/product");
 app.use("/products", productRouter);
 
-
-
 /* Mongoose Setup */
 const PORT = process.env.PORT || 8073;
 const DB_URL = process.env.MONGODB_URL;
@@ -29,5 +27,5 @@ mongoose.connect(DB_URL, {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server is up and running on port number : ${PORT}`);
+    console.log(`Server is up and running on port number: ${PORT}`);
 });

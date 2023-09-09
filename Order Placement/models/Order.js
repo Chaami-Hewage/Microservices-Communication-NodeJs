@@ -32,3 +32,4 @@ Order.hasMany(Item);
 Item.belongsTo(Order);
 
 module.exports = { Order, Item };
+

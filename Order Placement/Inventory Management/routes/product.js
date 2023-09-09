@@ -5,10 +5,24 @@ const Product = require("../models/Product");
 // Create a new product
 router.post("/addProduct", async (req, res) => {
     try {
-        const product = new Product(req.body);
-        const savedProduct = await product.save();
+        const newProduct = new Product({
+            name: req.body.name,
+            desc: req.body.desc,
+            banner: req.body.banner,
+            type: req.body.type,
+            unit: req.body.unit,
+            price: req.body.price,
+            available: req.body.available,
+            supplier: req.body.supplier,
+            messageId: req.body.messageId,
+            eventTimestamp: req.body.eventTimestamp,
+        });
+
+        const savedProduct = await newProduct.save();
+
         res.json(savedProduct);
     } catch (error) {
+        console.error("Error creating product:", error);
         res.status(500).json({ error: "Unable to create the product" });
     }
 });
@@ -47,6 +61,7 @@ router.put("/:productId", async (req, res) => {
         if (!updatedProduct) {
             return res.status(404).json({ error: "Product not found" });
         }
+
         res.json(updatedProduct);
     } catch (error) {
         res.status(500).json({ error: "Unable to update the product" });
@@ -60,6 +75,7 @@ router.delete("/:productId", async (req, res) => {
         if (!deletedProduct) {
             return res.status(404).json({ error: "Product not found" });
         }
+
         res.json({ message: "Product deleted successfully" });
     } catch (error) {
         res.status(500).json({ error: "Unable to delete the product" });
