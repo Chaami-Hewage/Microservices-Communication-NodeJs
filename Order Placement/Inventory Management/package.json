@@ -1,5 +1,5 @@
 {
-  "name": "order-placement",
+  "name": "inventory-management",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -16,12 +16,8 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.1",
-    "pg": "^8.11.3",
-    "sequelize": "^6.32.1",
+    "mongoose": "^7.4.3",
     "uuid": "^9.0.0",
     "winston": "^3.10.0"
-  },
-  "devDependencies": {
-    "@types/sequelize": "^4.28.15"
   }
 }
