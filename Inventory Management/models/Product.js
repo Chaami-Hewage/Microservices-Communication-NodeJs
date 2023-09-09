@@ -10,7 +10,9 @@ const ProductSchema = new Schema({
     unit: Number,
     price: Number,
     available: Boolean,
-    suplier: String
+    supplier: String,
+    messageId: String,
+    eventTimestamp: Date,
 });
 
-module.exports =  mongoose.model('product', ProductSchema);
+module.exports = mongoose.model('product', ProductSchema);

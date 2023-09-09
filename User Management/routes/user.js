@@ -1,8 +1,7 @@
-const express = require("express");
-const router = express.Router();
-const db = require("../db");
-
-module.exports = (pool) => {
+module.exports = (pool, channel, queue) => {
+    const express = require("express");
+    const router = express.Router();
+    const db = require("../db");
 
     // Add a new user
     router.post("/", async (req, res) => {
@@ -13,6 +12,11 @@ module.exports = (pool) => {
             await connection.execute("INSERT INTO users SET ?", [newUser]);
 
             connection.release();
+
+            //message to rabbitmq
+            channel.sendToQueue(queue, Buffer.from(JSON.stringify(newUser)), {
+                persistent: true, // Ensure the message is not lost even if RabbitMQ restarts
+            });
 
             res.json({ message: "User added successfully" });
         } catch (error) {
@@ -33,6 +37,8 @@ module.exports = (pool) => {
             );
 
             connection.release();
+            const message = 'User Found!';
+            channel.sendToQueue(queue, Buffer.from(message));
 
             if (rows.length === 0) {
                 return res.status(404).json({ message: "User not found" });
@@ -60,6 +66,11 @@ module.exports = (pool) => {
 
             connection.release();
 
+            //message to rabbitmq
+            channel.sendToQueue(queue, Buffer.from(JSON.stringify(updatedUserData)), {
+                persistent: true,
+            });
+
             res.json({ message: "User updated successfully" });
         } catch (error) {
             console.error("Error:", error);
@@ -67,7 +78,7 @@ module.exports = (pool) => {
         }
     });
 
-// Get customer's wishlist by user ID
+    // Get customer's wishlist by user ID
     router.get("/:userId/wishlist", async (req, res) => {
         try {
             const userId = req.params.userId;
@@ -92,7 +103,7 @@ module.exports = (pool) => {
         }
     });
 
-// Update customer's address by user ID
+    // Update customer's address by user ID
     router.put("/:userId/address", async (req, res) => {
         try {
             const userId = req.params.userId;
@@ -105,6 +116,11 @@ module.exports = (pool) => {
             );
 
             connection.release();
+
+            //message to rabbitmq
+            channel.sendToQueue(queue, Buffer.from(JSON.stringify(newAddress)), {
+                persistent: true,
+            });
 
             res.json({ message: "Address updated successfully" });
         } catch (error) {
@@ -132,6 +148,11 @@ module.exports = (pool) => {
             // Delete the user
             await connection.execute("DELETE FROM users WHERE id = ?", [userId]);
             connection.release();
+
+            //message to rabbitmq
+            channel.sendToQueue(queue, Buffer.from(JSON.stringify({ userId })), {
+                persistent: true,
+            });
 
             res.json({ message: "User deleted successfully" });
         } catch (error) {

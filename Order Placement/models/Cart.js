@@ -1,13 +1,13 @@
 const { DataTypes } = require('sequelize');
-const db = require('../db');
+const { sequelize } = require('../db');
 
-const Cart = db.define('Cart', {
+const Cart = sequelize.define('Cart', {
     customerId: {
         type: DataTypes.STRING,
     },
 });
 
-const CartItem = db.define('CartItem', {
+const CartItem = sequelize.define('CartItem', {
     unit: {
         type: DataTypes.INTEGER,
         allowNull: false,

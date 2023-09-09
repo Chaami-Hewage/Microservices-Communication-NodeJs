@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
-const db = require('../db');
+const { sequelize } = require('../db');
 
-const Order = db.define('Order', {
+const Order = sequelize.define('Order', {
     orderId: {
         type: DataTypes.STRING,
     },
@@ -17,9 +17,11 @@ const Order = db.define('Order', {
     txnId: {
         type: DataTypes.STRING,
     },
+},{
+    tableName: 'Order',
 });
 
-const Item = db.define('Item', {
+const Item = sequelize.define('Item', {
     unit: {
         type: DataTypes.INTEGER,
         allowNull: false,
