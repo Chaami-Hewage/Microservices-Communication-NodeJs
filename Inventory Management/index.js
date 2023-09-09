@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 
 /* Routes */
 const productRouter = require("./routes/product");
-app.use("/products", productRouter);
+app.use("/", productRouter);
 
 /* Mongoose Setup */
 const PORT = process.env.PORT || 8073;

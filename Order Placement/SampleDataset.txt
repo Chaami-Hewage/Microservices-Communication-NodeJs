@@ -4,36 +4,22 @@ CREATE DATABASE Order_placement;
 -- Connect to the database
 \c Order_placement;
 
--- Create the "Orders" table
-CREATE TABLE Orders (
+CREATE TABLE "Orders" (
     id SERIAL PRIMARY KEY,
-    order_id VARCHAR(255) NOT NULL,
-    customer_id VARCHAR(255) NOT NULL,
-    amount INTEGER NOT NULL,
+    orderId VARCHAR(255) NOT NULL,
+    customerId VARCHAR(255) NOT NULL,
+    amount FLOAT NOT NULL,
     status VARCHAR(255) NOT NULL,
-    txn_id VARCHAR(255) NOT NULL
+    txnId VARCHAR(255) NOT NULL,
+    createdAt TIMESTAMP NOT NULL,
+    updatedAt TIMESTAMP NOT NULL
 );
-
--- Create the "Items" table
-CREATE TABLE Items (
-    id SERIAL PRIMARY KEY,
-    unit INTEGER NOT NULL,
-    order_id INTEGER REFERENCES Orders (id) ON DELETE CASCADE
-);
-
--- Sample data for the "Orders" and "Items" tables
 
 -- Create a few sample orders
-INSERT INTO Orders (order_id, customer_id, amount, status, txn_id)
+INSERT INTO "Orders" (order_id, customer_id, amount, status, txn_id)
 VALUES
     ('ORDER001', 'CUSTOMER001', 100, 'COMPLETED', 'TXN001'),
     ('ORDER002', 'CUSTOMER002', 150, 'PROCESSING', 'TXN002'),
     ('ORDER003', 'CUSTOMER001', 75, 'COMPLETED', 'TXN003');
 
--- Create associated items for the orders
-INSERT INTO Items (unit, order_id)
-VALUES
-    (5, 1), -- 5 units associated with Order 1
-    (3, 1), -- 3 units associated with Order 1
-    (2, 2), -- 2 units associated with Order 2
-    (4, 3); -- 4 units associated with Order 3
+SELECT * FROM "Orders";

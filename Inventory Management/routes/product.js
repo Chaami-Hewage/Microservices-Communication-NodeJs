@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("../models/Product");
+const axios = require("axios");
 
 // Create a new product
 router.post("/addProduct", async (req, res) => {
@@ -20,10 +21,26 @@ router.post("/addProduct", async (req, res) => {
 
         const savedProduct = await newProduct.save();
 
-        res.json(savedProduct);
+        const orderData = {
+            orderId: "ORDER123",
+            customerId: "CUSTOMER123",
+            amount: req.body.price * req.body.unit,
+            status: "PENDING",
+            txnId: "TXN123",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        };
+
+        const orderResponse = await axios.post("http://localhost:8072/order/addOrder", orderData);
+
+        if (orderResponse.status === 201) {
+            res.json(savedProduct);
+        } else {
+            res.status(500).json({error: "Unable to create the order"});
+        }
     } catch (error) {
         console.error("Error creating product:", error);
-        res.status(500).json({ error: "Unable to create the product" });
+        res.status(500).json({error: "Unable to create the product"});
     }
 });
 
@@ -33,7 +50,7 @@ router.get("/", async (req, res) => {
         const products = await Product.find();
         res.json(products);
     } catch (error) {
-        res.status(500).json({ error: "Unable to fetch products" });
+        res.status(500).json({error: "Unable to fetch products"});
     }
 });
 
@@ -42,11 +59,11 @@ router.get("/:productId", async (req, res) => {
     try {
         const product = await Product.findById(req.params.productId);
         if (!product) {
-            return res.status(404).json({ error: "Product not found" });
+            return res.status(404).json({error: "Product not found"});
         }
         res.json(product);
     } catch (error) {
-        res.status(500).json({ error: "Unable to fetch the product" });
+        res.status(500).json({error: "Unable to fetch the product"});
     }
 });
 
@@ -56,15 +73,15 @@ router.put("/:productId", async (req, res) => {
         const updatedProduct = await Product.findByIdAndUpdate(
             req.params.productId,
             req.body,
-            { new: true }
+            {new: true}
         );
         if (!updatedProduct) {
-            return res.status(404).json({ error: "Product not found" });
+            return res.status(404).json({error: "Product not found"});
         }
 
         res.json(updatedProduct);
     } catch (error) {
-        res.status(500).json({ error: "Unable to update the product" });
+        res.status(500).json({error: "Unable to update the product"});
     }
 });
 
@@ -73,12 +90,12 @@ router.delete("/:productId", async (req, res) => {
     try {
         const deletedProduct = await Product.findByIdAndRemove(req.params.productId);
         if (!deletedProduct) {
-            return res.status(404).json({ error: "Product not found" });
+            return res.status(404).json({error: "Product not found"});
         }
 
-        res.json({ message: "Product deleted successfully" });
+        res.json({message: "Product deleted successfully"});
     } catch (error) {
-        res.status(500).json({ error: "Unable to delete the product" });
+        res.status(500).json({error: "Unable to delete the product"});
     }
 });
 
