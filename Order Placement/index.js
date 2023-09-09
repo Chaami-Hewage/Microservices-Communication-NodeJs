@@ -2,7 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const { Sequelize, DataTypes } = require("sequelize");
+const {Sequelize, DataTypes} = require("sequelize");
+const {pool} = require("./db");
 
 const app = express();
 require("dotenv").config();
@@ -14,12 +15,14 @@ app.use(bodyParser.json());
 /* Routes */
 
 
+
 /* Sequelize Setup */
 const PORT = process.env.PORT || 8071;
 const DB_URL = process.env.POSTGRESQL_URL;
 
 const sequelize = new Sequelize(DB_URL, {
     dialect: "postgres",
+    // logging: false
 });
 
 sequelize
@@ -34,3 +37,4 @@ sequelize
 app.listen(PORT, () => {
     console.log(`Server is up and running on port number : ${PORT}`);
 });
+
