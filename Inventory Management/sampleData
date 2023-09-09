@@ -1,0 +1,30 @@
+{
+    name: "Product 1",
+    desc: "Description for Product 1",
+    banner: "https://example.com/product1-banner.jpg",
+    type: "Type A",
+    unit: 10,
+    price: 19.99,
+    available: true,
+    supplier: "Supplier 1"
+},
+{
+    name: "Product 2",
+    desc: "Description for Product 2",
+    banner: "https://example.com/product2-banner.jpg",
+    type: "Type B",
+    unit: 15,
+    price: 29.99,
+    available: true,
+    supplier: "Supplier 2"
+},
+{
+    name: "Product 3",
+    desc: "Description for Product 3",
+    banner: "https://example.com/product3-banner.jpg",
+    type: "Type A",
+    unit: 5,
+    price: 14.99,
+    available: false,
+    supplier: "Supplier 1"
+}
